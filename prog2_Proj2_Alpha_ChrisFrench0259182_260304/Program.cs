@@ -53,15 +53,15 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 //and provides output to display these values
                 {
                     player._health = -enemy._attack;
-                    Console.SetCursorPosition(60, 6);
+                    Console.SetCursorPosition(60, 7);
                     Console.WriteLine($" {player._name} takes {enemy._attack} points of combat damage");
                     enemy._health = -player._attack;
-                    Console.SetCursorPosition(60, 9);
+                    Console.SetCursorPosition(60, 8);
                     Console.WriteLine($" {enemy._name} takes {player._attack} points of combat damage");
 
                     if (player._health <= 0)
                     {
-                        Console.SetCursorPosition(60, 7);
+                        Console.SetCursorPosition(60, 9);
                         Console.WriteLine($" {player._name} has {player._health}health, {player._name} has died");
                         isPlaying = false;
                     }
@@ -98,14 +98,14 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             
             int plX = 0, plY = 0;
             ConsoleKey input = Console.ReadKey(true).Key;
-            // move player with W,A,S,D tried to get optional arrow keys to work  could not at present time
-            //if (input == ConsoleKey.A || ConsoleKey.LeftArrow) plX = -1;
+            // move player with W,A,S,D or optional arrow keys 
+           if (input ==  ConsoleKey.LeftArrow) plX = -1;
             if (input == ConsoleKey.A ) plX = -1;
-            //if (input == ConsoleKey.D || ConsoleKey.RightArrow) plX = 1;
+           if (input ==  ConsoleKey.RightArrow) plX = 1;
             if (input == ConsoleKey.D) plX = 1;
-            //if (input == ConsoleKey.W || ConsoleKey.UpArrow) plY = -1;
+           if (input == ConsoleKey.UpArrow) plY = -1;
             if (input == ConsoleKey.W) plY = -1;
-           // if (input == ConsoleKey.S || ConsoleKey.DownArrow) plY = 1;
+           if (input ==  ConsoleKey.DownArrow) plY = 1;
             if (input == ConsoleKey.S) plY = 1;
 
             if (input == ConsoleKey.Q) isPlaying = false; //Quit the 'is playing' loop
@@ -124,26 +124,31 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 player._x = nextX;
                 player._y = nextY;
 
-                if (map.Maps[player._y][player._x] == '$')// applies lootable gold 
+                if ((player._x,player._y ) == (treasure_x_pos, treasure_y_pos))// applies lootable gold 
                 {
-                    gold = gold + loot;
+                    gold += 15;
                     Console.SetCursorPosition(60, 5);
-                    Console.WriteLine($" {player._name}loots {loot} amounts of golds! {player._name} now has {gold} gold...woooo!");
+                    Console.WriteLine($" {player._name}loots 15 amounts of golds! ");
+                      Console.SetCursorPosition(60, 6);
+                    Console.WriteLine($"{player._name} now has {gold} gold...woooo!");
 
                 }
                 if (map.Maps[player._y][player._x] == '%')// applies lava damage 
                 {
-                    player._health =- 30;
-                    Console.SetCursorPosition(60, 4);
+                    player._health -= 30;
+                    Console.SetCursorPosition(60, 3);
                     Console.WriteLine($" {player._name}takes 30 points of lava damage");
                     if (player._health <= 0) isPlaying = false;
                 }
                 if (map.Maps[player._y][player._x] == 'w')// applies spring water healing
                 {
-                    player._health =+ 20;
-                    Console.SetCursorPosition(60, 4);
-                    Console.WriteLine($" {player._name}Finds cool refreshing sparkling mineral water and is healed for 20 pts");
-                    
+                    player._health += 20;
+                    Console.SetCursorPosition(60, 3);
+                    Console.WriteLine($" {player._name}Finds cool refreshing sparkling mineral");
+                     Console.SetCursorPosition(60, 4);
+                    Console.WriteLine($" water and is healed for 20 pts");
+
+
                 }
 
             }
@@ -182,7 +187,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
 
             char targetTile = map.Maps[nextY][nextX];
-            if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != '!')// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
+            if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != player._symbol)// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
             {
                 Console.SetCursorPosition(enemy._x, enemy._y);
                 Console.Write(" ");
