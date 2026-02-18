@@ -48,26 +48,36 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
 
 
-                if ((player._x == (enemy._x + -1)) && (player._y == (enemy._y + -1)))
+                if ((player._x == (enemy._x -+1)) && (player._y == (enemy._y -+1)))
                 //    defines that if  player and enemy are within one space pos or neg x or y they damage eachother.
                 //and provides output to display these values
                 {
                     player._health = -enemy._attack;
                     Console.SetCursorPosition(60, 7);
                     Console.WriteLine($" {player._name} takes {enemy._attack} points of combat damage");
-                    enemy._health = -player._attack;
                     Console.SetCursorPosition(60, 8);
+                    Console.WriteLine($" {player._name} has {player._health}health...");
+
+
+                   enemy._health = -player._attack;
+                    Console.SetCursorPosition(60, 9);
                     Console.WriteLine($" {enemy._name} takes {player._attack} points of combat damage");
+                    Console.SetCursorPosition(60, 10);
+                    Console.WriteLine($" {enemy._name} has {enemy._health}health...");
+
+
+
+
 
                     if (player._health <= 0)
                     {
-                        Console.SetCursorPosition(60, 9);
+                        Console.SetCursorPosition(60, 11);
                         Console.WriteLine($" {player._name} has {player._health}health, {player._name} has died");
                         isPlaying = false;
                     }
                     if (enemy._health <= 0)
                     {
-                        Console.SetCursorPosition(60, 10);
+                        Console.SetCursorPosition(60, 12);
                         Console.WriteLine($" {enemy._name} has {enemy._health}health, {enemy._name} has died");
                         isPlaying = false;
                     }
@@ -93,7 +103,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
         }
 
 
-        static void MovePlayer()
+        public static void MovePlayer()
         {
             
             int plX = 0, plY = 0;
@@ -187,7 +197,9 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
 
             char targetTile = map.Maps[nextY][nextX];
-            if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != player._symbol)// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
+
+            //if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != (player._x, player._y))// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
+            if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != (player._symbol))// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
             {
                 Console.SetCursorPosition(enemy._x, enemy._y);
                 Console.Write(" ");

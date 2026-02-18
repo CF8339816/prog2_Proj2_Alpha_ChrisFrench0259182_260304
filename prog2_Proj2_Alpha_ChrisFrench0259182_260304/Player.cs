@@ -19,15 +19,15 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
 
 
-        public void Move(int plMoveX, int plMoveY)// sets up move for input
-        {
-            int newPlMoveX = _x + plMoveX;
-            int newPlMoveY = _y + plMoveY;
+        //public void Move(int plMoveX, int plMoveY)// sets up move for input
+        //{
+        //    int newPlMoveX = _x + plMoveX;
+        //    int newPlMoveY = _y + plMoveY;
 
 
-            if (newPlMoveX >= _min_max_x.Item1 && newPlMoveX <= _min_max_x.Item2) _x = newPlMoveX;
-            if (newPlMoveY >= _min_max_y.Item1 && newPlMoveY <= _min_max_y.Item2) _y = newPlMoveY;
-        }
+        //    if (newPlMoveX >= _min_max_x.Item1 && newPlMoveX <= _min_max_x.Item2) _x = newPlMoveX;
+        //    if (newPlMoveY >= _min_max_y.Item1 && newPlMoveY <= _min_max_y.Item2) _y = newPlMoveY;
+        //}
 
 
 
