@@ -11,7 +11,8 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 {
     class Program
     {
-
+        //static string heroName;
+      //  static Player player = new Player(heroName, 3, 3, 15, '!', 50, ConsoleColor.Blue);
         static Player player = new Player("Hero", 3, 3, 15, '!', 50, ConsoleColor.Blue);
         static Enemy enemy = new Enemy("Gobbo", 50, 4, 10, '&', 25, ConsoleColor.Green);
         //static Enemy enemy = new Enemy("Slobbo", 20, 24, 10, '&', 25, ConsoleColor.Green);
@@ -34,6 +35,11 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
         static void Main(string[] args)
         {
+            Console.SetCursorPosition(0, 0);
+            alias();
+            Console.Clear();
+            Console.CursorVisible = false;
+
             Console.CursorVisible = false;
             map.MapLoader();
             Console.WriteLine("Press any Key to start... Use W,A,S,D to move around the map...Press 'Q' to exit...\nFight enemies '&' by manouvering to them or try to avoid them... Lava '%' will damage you ");
@@ -282,7 +288,23 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                     goldTreasure = true;
                 }
             }
-        }
+
+
+
+        //static void alias()
+        //{
+        //    Console.ForegroundColor = ConsoleColor.DarkYellow;
+        //    Console.BackgroundColor = ConsoleColor.Black;
+        //    Console.WriteLine("What is your character's name");
+        //    Console.ForegroundColor = ConsoleColor.Blue;
+        //    heroName = Console.ReadLine();
+        //}
+
+
+
+
+
+    }
 
 
 
