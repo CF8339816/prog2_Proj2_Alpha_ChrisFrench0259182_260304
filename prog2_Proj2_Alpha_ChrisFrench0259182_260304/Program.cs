@@ -62,48 +62,6 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 DrawGold();
 
 
-
-                if ((nextX == enemy._x) && (nextY == enemy._y))
-                //    defines that if  player and enemy are within one space pos or neg x or y they damage eachother.
-                //and provides output to display these values
-                {
-
-                    enemy._health = enemy._health - player._attack;
-                    Console.SetCursorPosition(60, 14);
-                    Console.WriteLine($" {enemy._name} takes {player._attack} points of combat damage");
-                    Console.SetCursorPosition(60, 15);
-                    Console.WriteLine($" {enemy._name} has {enemy._health} health...");
-
-                    player._health = player._health - enemy._attack;
-                    Console.SetCursorPosition(60, 17);
-                    Console.WriteLine($" {player._name} takes {enemy._attack} points of combat damage");
-                    Console.SetCursorPosition(60, 18);
-                    Console.WriteLine($" {player._name} has {player._health} health...");
-
-
-
-                    if (player._health <= 0 || enemy._health <= 0)
-
-                        if (player._health <= 0)
-                        {
-                            player._health = 0;
-                            Console.SetCursorPosition(60, 20);
-                            Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died");
-                            isPlaying = false;
-                        }
-                    if (enemy._health <= 0)
-                    {
-                        enemy._health = 0;
-                        Console.SetCursorPosition(60, 21);
-                        Console.WriteLine($" {enemy._name} has {enemy._health} health, {enemy._name} has died");
-                        isPlaying = false;
-                    }
-                    //else
-                    //{
-                    //    return;
-                    //}
-                    return;
-                }
             }
 
             if (player._health == 0)
@@ -150,11 +108,58 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             int nextX = player._x + plX;
             int nextY = player._y + plY;
 
-            if (map.CanMoveTo(nextX, nextY))// checks map loader for forbidden tiles
+            //if (map.CanMoveTo(nextX, nextY))// checks map loader for forbidden tiles
+            //{
+            //    Console.SetCursorPosition(player._x, player._y);
+            //    char oldTile = map.Maps[player._y][player._x];
+            //    WriteTileWithColor(oldTile);
+            //    player._x = nextX;
+            //    player._y = nextY;
+
+            if (nextX == enemy._x && nextY == enemy._y)
+            {
+                // COMBAT LOGIC: Deal and take damage instead of moving
+                int damageToEnemy = 10;
+                int damageToPlayer = 5;
+
+                enemy._health -= damageToEnemy;
+                player._health -= damageToPlayer;
+
+                Console.SetCursorPosition(60, 14);
+                Console.WriteLine($" {enemy._name} takes {player._attack} points of combat damage");
+                Console.SetCursorPosition(60, 15);
+                Console.WriteLine($" {enemy._name} has {enemy._health} health...");
+
+                Console.SetCursorPosition(60, 17);
+                Console.WriteLine($" {player._name} takes {enemy._attack} points of combat damage");
+                Console.SetCursorPosition(60, 18);
+                Console.WriteLine($" {player._name} has {player._health} health...");
+
+                if (player._health <= 0 || enemy._health <= 0)
+                {
+                    if (player._health <= 0)
+                    {
+                        player._health = 0;
+                        Console.SetCursorPosition(60, 20);
+                        Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died");
+                        isPlaying = false;
+                    }
+                    if (enemy._health <= 0)
+                    {
+                        enemy._health = 0;
+                        Console.SetCursorPosition(60, 21);
+                        Console.WriteLine($" {enemy._name} has {enemy._health} health, {enemy._name} has died");
+                        isPlaying = true;
+                    }
+                }
+            }
+            
+            else if (map.CanMoveTo(nextX, nextY))
             {
                 Console.SetCursorPosition(player._x, player._y);
                 char oldTile = map.Maps[player._y][player._x];
                 WriteTileWithColor(oldTile);
+
                 player._x = nextX;
                 player._y = nextY;
 
