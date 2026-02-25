@@ -27,7 +27,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
         
         static int plMaxHP = 50;
   
-
+        static bool isAlly = false; //sets bool to check for other allies in movement path
 
         static int gold = 0;
         static bool goldTreasure = true;
@@ -56,7 +56,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             enemies.Add(new Enemy("Slobbo", 20, 24, 8, '&', 20, ConsoleColor.Green));
             enemies.Add(new Enemy("Zobbo", 15, 12, 12, '&', 25, ConsoleColor.Green));
             enemies.Add(new Enemy("Boss Hobbo", 49, 18, 15, '&', 40, ConsoleColor.DarkYellow));
-
+            enemies.Add(new Enemy("testo", 4, 10, 0, 'T', 1, ConsoleColor.DarkYellow));
 
 
             while (isPlaying)
@@ -254,7 +254,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             else if (player._y < (e._y - 4)) nextY--;
 
 
-            bool isAlly = false; //sets bool to check for other allies in movement path
+            //bool isAlly = false; //sets bool to check for other allies in movement path
             foreach (Enemy other in enemies)
             {
                 if (other != e && nextX == other._x && nextY == other._y)
