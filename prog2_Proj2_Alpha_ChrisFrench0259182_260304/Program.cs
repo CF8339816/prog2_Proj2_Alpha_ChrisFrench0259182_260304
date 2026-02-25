@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -48,12 +49,13 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
             Console.CursorVisible = false;
             map.MapLoader();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("Press any Key to start... Use W,A,S,D  or arrow keys to move around the map...Press 'Q' to exit...\nFight enemies '&' by manouvering to them or try to avoid them... Lava '%' will damage you ");
 
             enemies.Add(new Enemy("Gobbo", 50, 4, 10, '&', 25, ConsoleColor.Green));
-            enemies.Add(new Enemy("Slobbo", 20, 24, 10, '&', 25, ConsoleColor.Green));
+            enemies.Add(new Enemy("Slobbo", 20, 24, 8, '&', 20, ConsoleColor.Green));
             enemies.Add(new Enemy("Zobbo", 15, 12, 12, '&', 25, ConsoleColor.Green));
-            enemies.Add(new Enemy("Hobbo", 15, 12, 12, '&', 40, ConsoleColor.DarkYellow));
+            enemies.Add(new Enemy("Boss Hobbo", 49, 18, 15, '&', 40, ConsoleColor.DarkYellow));
 
 
 
@@ -63,27 +65,36 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 MovePlayer();
                 if (map.Maps[player._y][player._x] == 'G')
                 {
-                    isPlaying = false; 
-                    continue; 
+                    isPlaying = false;
+                    continue; //skips past rest
                 }
-                foreach (var e in enemies)
+                for (int i = enemies.Count - 1; i >= 0; i--)
                 {
-                    MoveEnemy(e);
+                    if (enemies[i]._health <= 0)
+                    {
+                        Console.Beep(300, 100);
+                        Console.Beep(200, 150);
+                        Console.SetCursorPosition(enemies[i]._x, enemies[i]._y);
+                        WriteTileWithColor(map.Maps[enemies[i]._y][enemies[i]._x]);
+                        enemies.RemoveAt(i);
+                        continue; //skips past rest
+                    }
+                    MoveEnemy(enemies[i]);
                 }
                 DrawEntities();
                 DrawGold();
 
 
             }
-           if ((map.Maps[player._y][player._x] == 'G') || (player._health == 0))
-              {
-               if (player._health == 0)
+            if ((map.Maps[player._y][player._x] == 'G') || (player._health == 0))
+            {
+                if (player._health == 0)
                 {
                     Console.SetCursorPosition(60, 23);// outputs player death and end of game prompts to exit
                     Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died with {gold} golds on them");
                     Console.ReadKey(true);
                 }
-           
+
                 if (map.Maps[player._y][player._x] == 'G')
                 {
                     isPlaying = false;
@@ -101,7 +112,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             Console.WriteLine(" please press any key to exit");
             Console.ReadKey(true);
             Console.WriteLine("\n\n\n\n\n\n");
-
+            Console.ResetColor();
         }
 
         public static void MovePlayer()
@@ -124,25 +135,16 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             int nextX = player._x + plX;
             int nextY = player._y + plY;
 
-            //if (map.CanMoveTo(nextX, nextY))// checks map loader for forbidden tiles
-            //{
-            //    Console.SetCursorPosition(player._x, player._y);
-            //    char oldTile = map.Maps[player._y][player._x];
-            //    WriteTileWithColor(oldTile);
-            //    player._x = nextX;
-            //    player._y = nextY;
-
+           
             bool hitEnemy = false;
             foreach (var e in enemies)
             {
                 if (nextX == e._x && nextY == e._y)
                 {
-                    // COMBAT LOGIC: Deal and take damage instead of moving
-                    int damageToEnemy = 10;
-                    int damageToPlayer = 5;
 
-                    e._health -= damageToEnemy;
-                    player._health -= damageToPlayer;
+                    Console.Beep(800, 50);
+                    e._health -= player._attack;
+                    player._health -=  e._attack;
 
                     Console.SetCursorPosition(60, 14);
                     Console.WriteLine($" {e._name} takes {player._attack} points of combat damage");
@@ -251,10 +253,18 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             if (player._y > (e._y + 4)) nextY++;
             else if (player._y < (e._y - 4)) nextY--;
 
-            char targetTile = map.Maps[nextY][nextX];
 
-            //if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != (player._x, player._y))// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
-            //if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != (player._symbol))// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
+            bool isAlly = false; //sets bool to check for other allies in movement path
+            foreach (Enemy other in enemies)
+            {
+                if (other != e && nextX == other._x && nextY == other._y)
+                {
+                    isAlly = true;
+                    break;
+                }
+            }
+
+            char targetTile = map.Maps[nextY][nextX];
 
             if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && (nextX != player._x || nextY != player._y))
 
@@ -285,13 +295,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 }
             }
 
-
-
-
-            //Console.SetCursorPosition(e._x, enemy._y);
-            //Console.ForegroundColor = enemy._color;
-            //Console.Write(enemy._symbol);
-
+             
             Console.SetCursorPosition(player._x, player._y);
             Console.ForegroundColor = player._color;
             Console.Write(player._symbol);
