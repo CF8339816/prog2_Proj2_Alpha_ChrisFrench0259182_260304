@@ -63,7 +63,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
 
 
-                if ((nextX == enemy._x) && (nextY == enemy._y ))
+                if ((nextX == enemy._x) && (nextY == enemy._y))
                 //    defines that if  player and enemy are within one space pos or neg x or y they damage eachother.
                 //and provides output to display these values
                 {
@@ -83,7 +83,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
 
                     if (player._health <= 0 || enemy._health <= 0)
-                       
+
                         if (player._health <= 0)
                         {
                             player._health = 0;
@@ -91,13 +91,13 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                             Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died");
                             isPlaying = false;
                         }
-                        if (enemy._health <= 0)
-                        {
-                            enemy._health = 0;
-                            Console.SetCursorPosition(60, 22);
-                            Console.WriteLine($" {enemy._name} has {enemy._health} health, {enemy._name} has died");
-                            isPlaying = false;
-                        }
+                    if (enemy._health <= 0)
+                    {
+                        enemy._health = 0;
+                        Console.SetCursorPosition(60, 21);
+                        Console.WriteLine($" {enemy._name} has {enemy._health} health, {enemy._name} has died");
+                        isPlaying = false;
+                    }
                     //else
                     //{
                     //    return;
@@ -106,19 +106,29 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 }
             }
 
-
-            Console.SetCursorPosition(60, 23);// outputs player death and end of game prompts to exit
-            Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died with {gold} golds on them ....");
-            Console.ReadKey(true);
+            if (player._health == 0)
+            {
+                Console.SetCursorPosition(60, 23);// outputs player death and end of game prompts to exit
+                Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died with {gold} golds on them");
+                Console.ReadKey(true);
+            }
+            if (map.Maps[player._y][player._x] == 'G')
+            {
+                Console.SetCursorPosition(60, 22);// outputs player death and end of game prompts to exit
+                Console.WriteLine($" {player._name} has reached the goal with {player._health} health, ");
+                Console.SetCursorPosition(60, 23);
+                Console.WriteLine($"{player._name} is safe with {gold} golds on them");
+                Console.ReadKey(true);
+            }
             Console.SetCursorPosition(60, 24);
             Console.WriteLine(" please come back soon");
             Console.ReadKey(true);
             Console.SetCursorPosition(60, 25);
             Console.WriteLine(" please press any key to exit");
             Console.ReadKey(true);
-            Console.WriteLine("\n\n\n\n\n\n\");
-        }
+            Console.WriteLine("\n\n\n\n\n\n");
 
+        }
 
         public static void MovePlayer()
         {
@@ -143,11 +153,8 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             if (map.CanMoveTo(nextX, nextY))// checks map loader for forbidden tiles
             {
                 Console.SetCursorPosition(player._x, player._y);
-
                 char oldTile = map.Maps[player._y][player._x];
                 WriteTileWithColor(oldTile);
-
-
                 player._x = nextX;
                 player._y = nextY;
 
@@ -158,6 +165,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                     Console.WriteLine($" {player._name} loots 15 amounts of golds! ");
                     Console.SetCursorPosition(60, 6);
                     Console.WriteLine($"{player._name} now has {gold} gold...woooo!");
+                    goldTreasure = true;
                     DrawGold();
                 }
                 if (map.Maps[player._y][player._x] == '%')// applies lava damage 
@@ -173,8 +181,6 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                     Console.SetCursorPosition(60, 9);
                     Console.WriteLine($" {player._name} now has {player._health} HP");
                     if (player._health == 0) isPlaying = false;
-
-
                 }
                 if (map.Maps[player._y][player._x] == 'w')// applies spring water healing
                 {
@@ -187,10 +193,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                     Console.WriteLine($" {player._name} Finds cool refreshing sparkling mineral");
                      Console.SetCursorPosition(60, 12);
                     Console.WriteLine($" water and is healed for 20 pts {player._name} now has {player._health} HP");
-
-
                 }
-
             }
         }
 
@@ -213,8 +216,6 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             Random _rando = new Random();
             int nextRandX = enemy._x + _rando.Next(-1, 2); //randomises mocve on x
             int nextRandY = enemy._y + _rando.Next(-1, 2); // randomises moves on y
-
-
             nextX = nextRandX;
             nextY = nextRandY;
 
@@ -225,11 +226,13 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             if (player._y > (enemy._y + 4)) nextY++;
             else if (player._y < (enemy._y - 4)) nextY--;
 
-
             char targetTile = map.Maps[nextY][nextX];
 
             //if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != (player._x, player._y))// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
-            if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != (player._symbol))// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
+            //if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && targetTile != (player._symbol))// defines  the lava and the player as non traversable for the enemy  lava works player seems not to
+
+            if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && (nextX != player._x || nextY != player._y))
+
             {
                 Console.SetCursorPosition(enemy._x, enemy._y);
                 Console.Write(" ");
@@ -242,43 +245,30 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 nextX = 0;
                 nextY = 0;
             }
-
-
-
-
-
         }
 
         static void DrawEntities()// draws the player and the enemy symbols/ sprites
         {
-
             Console.SetCursorPosition(enemy._x, enemy._y);
             Console.ForegroundColor = enemy._color;
             Console.Write(enemy._symbol);
 
-
             Console.SetCursorPosition(player._x, player._y);
             Console.ForegroundColor = player._color;
             Console.Write(player._symbol);
-
             Console.ResetColor();
         }
-
-
         static void DrawGold()
         {
             if (goldTreasure)
             {
                 bool clearGoldSpawn = false;
-
                 while (!clearGoldSpawn)
                 {
                     treasure_x_pos = goldPileSpawn.Next(treasure_min_max_x.Item1, treasure_min_max_x.Item2 + 1);
                     treasure_y_pos = goldPileSpawn.Next(treasure_min_max_y.Item1, treasure_min_max_y.Item2 + 1);
-
                     if (map.CanMoveTo(treasure_x_pos, treasure_y_pos))
                     {
-
                         if (treasure_x_pos != player._x || treasure_y_pos != player._y) //checks for player
                         {
                             clearGoldSpawn = true;
@@ -287,38 +277,15 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 }
 
                 goldLoc = (treasure_x_pos, treasure_y_pos);
-
                 Console.SetCursorPosition(treasure_x_pos, treasure_y_pos);
-
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-
                 Console.Write("$");
-
                 Console.ResetColor();
-
                 goldTreasure = false;
-
-                DrawGold();
+               
             }
             Console.ResetColor();
-
-          
-
-                //if (PlPosition == goldLoc)
-                //{
-                //Random randoGold = new Random();
-
-                //    gold += randoGold.Next(4, 15);
-                //Console.SetCursorPosition(60, 5);
-                //Console.WriteLine($" {player._name}loots 15 amounts of golds! ");
-                //Console.SetCursorPosition(60, 6);
-                //Console.WriteLine($"{player._name} now has {gold} gold...woooo!");
-
-                //goldTreasure = true;
-                //}
-            }
-
-
+        }
 
         static void alias()
         {
@@ -329,17 +296,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             Name = Console.ReadLine();
         }
 
-
-
-
-
     }
-
-
-
-
-
-
 
     }
 
