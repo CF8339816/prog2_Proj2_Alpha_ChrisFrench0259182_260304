@@ -15,11 +15,8 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
         
         // static Player player = new Player("Hero", 3, 3, 15, '!', 50, ConsoleColor.Blue);
         static Player player = new Player( " " , 3, 3, 15, '!', 50, ConsoleColor.Blue);
-        
-        
-        static Enemy enemy = new Enemy("Gobbo", 50, 4, 10, '&', 25, ConsoleColor.Green);
+        static List<Enemy> enemies = new List<Enemy>();
 
-        //static Enemy enemy = new Enemy("Slobbo", 20, 24, 10, '&', 25, ConsoleColor.Green);
         static LoadMap map = new LoadMap();
         static bool isPlaying = true;
         //static int output_X = 61;
@@ -53,30 +50,49 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             map.MapLoader();
             Console.WriteLine("Press any Key to start... Use W,A,S,D  or arrow keys to move around the map...Press 'Q' to exit...\nFight enemies '&' by manouvering to them or try to avoid them... Lava '%' will damage you ");
 
+            enemies.Add(new Enemy("Gobbo", 50, 4, 10, '&', 25, ConsoleColor.Green));
+            enemies.Add(new Enemy("Slobbo", 20, 24, 10, '&', 25, ConsoleColor.Green));
+            enemies.Add(new Enemy("Zobbo", 15, 12, 12, '&', 25, ConsoleColor.Green));
+            enemies.Add(new Enemy("Hobbo", 15, 12, 12, '&', 40, ConsoleColor.DarkYellow));
+
+
+
             while (isPlaying)
             {
                 player._name = Name;
                 MovePlayer();
-                MoveEnemy();
+                if (map.Maps[player._y][player._x] == 'G')
+                {
+                    isPlaying = false; 
+                    continue; 
+                }
+                foreach (var e in enemies)
+                {
+                    MoveEnemy(e);
+                }
                 DrawEntities();
                 DrawGold();
 
 
             }
-
-            if (player._health == 0)
-            {
-                Console.SetCursorPosition(60, 23);// outputs player death and end of game prompts to exit
-                Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died with {gold} golds on them");
-                Console.ReadKey(true);
-            }
-            if (map.Maps[player._y][player._x] == 'G')
-            {
-                Console.SetCursorPosition(60, 22);// outputs player death and end of game prompts to exit
-                Console.WriteLine($" {player._name} has reached the goal with {player._health} health, ");
-                Console.SetCursorPosition(60, 23);
-                Console.WriteLine($"{player._name} is safe with {gold} golds on them");
-                Console.ReadKey(true);
+           if ((map.Maps[player._y][player._x] == 'G') || (player._health == 0))
+              {
+               if (player._health == 0)
+                {
+                    Console.SetCursorPosition(60, 23);// outputs player death and end of game prompts to exit
+                    Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died with {gold} golds on them");
+                    Console.ReadKey(true);
+                }
+           
+                if (map.Maps[player._y][player._x] == 'G')
+                {
+                    isPlaying = false;
+                    Console.SetCursorPosition(60, 22);// outputs player death and end of game prompts to exit
+                    Console.WriteLine($" {player._name} has reached the goal with {player._health} health, ");
+                    Console.SetCursorPosition(60, 23);
+                    Console.WriteLine($"{player._name} is safe with {gold} golds on them");
+                    Console.ReadKey(true);
+                }
             }
             Console.SetCursorPosition(60, 24);
             Console.WriteLine(" please come back soon");
@@ -90,17 +106,17 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
         public static void MovePlayer()
         {
-            
+
             int plX = 0, plY = 0;
             ConsoleKey input = Console.ReadKey(true).Key;
             // move player with W,A,S,D or optional arrow keys 
-           if (input ==  ConsoleKey.LeftArrow) plX = -1;
-            if (input == ConsoleKey.A ) plX = -1;
-           if (input ==  ConsoleKey.RightArrow) plX = 1;
+            if (input == ConsoleKey.LeftArrow) plX = -1;
+            if (input == ConsoleKey.A) plX = -1;
+            if (input == ConsoleKey.RightArrow) plX = 1;
             if (input == ConsoleKey.D) plX = 1;
-           if (input == ConsoleKey.UpArrow) plY = -1;
+            if (input == ConsoleKey.UpArrow) plY = -1;
             if (input == ConsoleKey.W) plY = -1;
-           if (input ==  ConsoleKey.DownArrow) plY = 1;
+            if (input == ConsoleKey.DownArrow) plY = 1;
             if (input == ConsoleKey.S) plY = 1;
 
             if (input == ConsoleKey.Q) isPlaying = false; //Quit the 'is playing' loop
@@ -116,88 +132,92 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             //    player._x = nextX;
             //    player._y = nextY;
 
-            if (nextX == enemy._x && nextY == enemy._y)
+            bool hitEnemy = false;
+            foreach (var e in enemies)
             {
-                // COMBAT LOGIC: Deal and take damage instead of moving
-                int damageToEnemy = 10;
-                int damageToPlayer = 5;
-
-                enemy._health -= damageToEnemy;
-                player._health -= damageToPlayer;
-
-                Console.SetCursorPosition(60, 14);
-                Console.WriteLine($" {enemy._name} takes {player._attack} points of combat damage");
-                Console.SetCursorPosition(60, 15);
-                Console.WriteLine($" {enemy._name} has {enemy._health} health...");
-
-                Console.SetCursorPosition(60, 17);
-                Console.WriteLine($" {player._name} takes {enemy._attack} points of combat damage");
-                Console.SetCursorPosition(60, 18);
-                Console.WriteLine($" {player._name} has {player._health} health...");
-
-                if (player._health <= 0 || enemy._health <= 0)
+                if (nextX == e._x && nextY == e._y)
                 {
-                    if (player._health <= 0)
+                    // COMBAT LOGIC: Deal and take damage instead of moving
+                    int damageToEnemy = 10;
+                    int damageToPlayer = 5;
+
+                    e._health -= damageToEnemy;
+                    player._health -= damageToPlayer;
+
+                    Console.SetCursorPosition(60, 14);
+                    Console.WriteLine($" {e._name} takes {player._attack} points of combat damage");
+                    Console.SetCursorPosition(60, 15);
+                    Console.WriteLine($" {e._name} has {e._health} health...");
+
+                    Console.SetCursorPosition(60, 17);
+                    Console.WriteLine($" {player._name} takes {e._attack} points of combat damage");
+                    Console.SetCursorPosition(60, 18);
+                    Console.WriteLine($" {player._name} has {player._health} health...");
+
+                    if (player._health <= 0 || e._health <= 0)
                     {
-                        player._health = 0;
-                        Console.SetCursorPosition(60, 20);
-                        Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died");
-                        isPlaying = false;
-                    }
-                    if (enemy._health <= 0)
-                    {
-                        enemy._health = 0;
-                        Console.SetCursorPosition(60, 21);
-                        Console.WriteLine($" {enemy._name} has {enemy._health} health, {enemy._name} has died");
-                        isPlaying = true;
+                        if (player._health <= 0)
+                        {
+                            player._health = 0;
+                            Console.SetCursorPosition(60, 20);
+                            Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died");
+                            isPlaying = false;
+                        }
+                        if (e._health <= 0)
+                        {
+                            e._health = 0;
+                            Console.SetCursorPosition(60, 21);
+                            Console.WriteLine($" {e._name} has {e._health} health, {e._name} has died");
+                            isPlaying = true;
+                        }
                     }
                 }
-            }
-            
-            else if (map.CanMoveTo(nextX, nextY))
-            {
-                Console.SetCursorPosition(player._x, player._y);
-                char oldTile = map.Maps[player._y][player._x];
-                WriteTileWithColor(oldTile);
 
-                player._x = nextX;
-                player._y = nextY;
-
-                if ((player._x, player._y) == (treasure_x_pos, treasure_y_pos))// applies lootable gold 
+                if (!hitEnemy && map.CanMoveTo(nextX, nextY))
                 {
-                    gold += 15;
-                    Console.SetCursorPosition(60, 5);
-                    Console.WriteLine($" {player._name} loots 15 amounts of golds! ");
-                    Console.SetCursorPosition(60, 6);
-                    Console.WriteLine($"{player._name} now has {gold} gold...woooo!");
-                    goldTreasure = true;
-                    DrawGold();
-                }
-                if (map.Maps[player._y][player._x] == '%')// applies lava damage 
-                {
-                    player._health -= 30;
+                    Console.SetCursorPosition(player._x, player._y);
+                    char oldTile = map.Maps[player._y][player._x];
+                    WriteTileWithColor(oldTile);
 
-                    if (player._health < 0)
+                    player._x = nextX;
+                    player._y = nextY;
+
+                    if ((player._x, player._y) == (treasure_x_pos, treasure_y_pos))// applies lootable gold 
                     {
-                        player._health = 0;
+                        gold += 15;
+                        Console.SetCursorPosition(60, 5);
+                        Console.WriteLine($" {player._name} loots 15 amounts of golds! ");
+                        Console.SetCursorPosition(60, 6);
+                        Console.WriteLine($"{player._name} now has {gold} gold...woooo!");
+                        goldTreasure = true;
+                        DrawGold();
                     }
-                    Console.SetCursorPosition(60, 8);
-                    Console.WriteLine($" {player._name} takes 30 points of lava damage");
-                    Console.SetCursorPosition(60, 9);
-                    Console.WriteLine($" {player._name} now has {player._health} HP");
-                    if (player._health == 0) isPlaying = false;
-                }
-                if (map.Maps[player._y][player._x] == 'w')// applies spring water healing
-                {
-                    player._health += 20;
-                    if (player._health > plMaxHP)
+                    if (map.Maps[player._y][player._x] == '%')// applies lava damage 
                     {
-                        player._health = plMaxHP;
+                        player._health -= 30;
+
+                        if (player._health < 0)
+                        {
+                            player._health = 0;
+                        }
+                        Console.SetCursorPosition(60, 8);
+                        Console.WriteLine($" {player._name} takes 30 points of lava damage");
+                        Console.SetCursorPosition(60, 9);
+                        Console.WriteLine($" {player._name} now has {player._health} HP");
+                        if (player._health == 0) isPlaying = false;
                     }
-                    Console.SetCursorPosition(60, 11);
-                    Console.WriteLine($" {player._name} Finds cool refreshing sparkling mineral");
-                     Console.SetCursorPosition(60, 12);
-                    Console.WriteLine($" water and is healed for 20 pts {player._name} now has {player._health} HP");
+                    if (map.Maps[player._y][player._x] == 'w')// applies spring water healing
+                    {
+                        player._health += 20;
+                        if (player._health > plMaxHP)
+                        {
+                            player._health = plMaxHP;
+                        }
+                        Console.SetCursorPosition(60, 11);
+                        Console.WriteLine($" {player._name} Finds cool refreshing sparkling mineral");
+                        Console.SetCursorPosition(60, 12);
+                        Console.WriteLine($" water and is healed for 20 pts {player._name} now has {player._health} HP");
+                    }
                 }
             }
         }
@@ -213,23 +233,23 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             Console.ResetColor();
         }
 
-        static void MoveEnemy()
+        static void MoveEnemy(Enemy e)
         {
             Thread.Sleep(75);
-            int nextX = enemy._x;
-            int nextY = enemy._y;
+            int nextX = e._x;
+            int nextY = e._y;
             Random _rando = new Random();
-            int nextRandX = enemy._x + _rando.Next(-1, 2); //randomises mocve on x
-            int nextRandY = enemy._y + _rando.Next(-1, 2); // randomises moves on y
+            int nextRandX = e._x + _rando.Next(-1, 2); //randomises mocve on x
+            int nextRandY = e._y + _rando.Next(-1, 2); // randomises moves on y
             nextX = nextRandX;
             nextY = nextRandY;
 
             // tells enemy how  to move when player is close
-            if (player._x > (enemy._x + 4)) nextX++;
-            else if (player._x < (enemy._x - 4)) nextX--;
+            if (player._x > (e._x + 4)) nextX++;
+            else if (player._x < (e._x - 4)) nextX--;
 
-            if (player._y > (enemy._y + 4)) nextY++;
-            else if (player._y < (enemy._y - 4)) nextY--;
+            if (player._y > (e._y + 4)) nextY++;
+            else if (player._y < (e._y - 4)) nextY--;
 
             char targetTile = map.Maps[nextY][nextX];
 
@@ -239,11 +259,11 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && (nextX != player._x || nextY != player._y))
 
             {
-                Console.SetCursorPosition(enemy._x, enemy._y);
+                Console.SetCursorPosition(e._x, e._y);
                 Console.Write(" ");
 
-                enemy._x = nextX;
-                enemy._y = nextY;
+                e._x = nextX;
+                e._y = nextY;
             }
             else
             {
@@ -254,9 +274,23 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
         static void DrawEntities()// draws the player and the enemy symbols/ sprites
         {
-            Console.SetCursorPosition(enemy._x, enemy._y);
-            Console.ForegroundColor = enemy._color;
-            Console.Write(enemy._symbol);
+
+            foreach (var e in enemies)
+            {
+                if (e._health > 0) // Only draw if alive
+                {
+                    Console.SetCursorPosition(e._x, e._y);
+                    Console.ForegroundColor = e._color;
+                    Console.Write(e._symbol);
+                }
+            }
+
+
+
+
+            //Console.SetCursorPosition(e._x, enemy._y);
+            //Console.ForegroundColor = enemy._color;
+            //Console.Write(enemy._symbol);
 
             Console.SetCursorPosition(player._x, player._y);
             Console.ForegroundColor = player._color;
