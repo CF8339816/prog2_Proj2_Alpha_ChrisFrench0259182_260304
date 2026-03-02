@@ -19,6 +19,8 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
         static List<Enemy> enemies = new List<Enemy>();
 
         static LoadMap map = new LoadMap();
+
+
         static bool isPlaying = true;
         //static int output_X = 61;
         //static int output_Y = 1;
@@ -49,14 +51,15 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
             Console.CursorVisible = false;
             map.MapLoader();
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("Press any Key to start... Use W,A,S,D  or arrow keys to move around the map...Press 'Q' to exit...\nFight enemies '&' by manouvering to them or try to avoid them... Lava '%' will damage you ");
 
             enemies.Add(new Enemy("Gobbo", 50, 4, 10, '&', 25, ConsoleColor.Green));
             enemies.Add(new Enemy("Slobbo", 20, 24, 8, '&', 20, ConsoleColor.Green));
             enemies.Add(new Enemy("Zobbo", 15, 12, 12, '&', 25, ConsoleColor.Green));
             enemies.Add(new Enemy("Boss Hobbo", 49, 18, 15, '&', 40, ConsoleColor.DarkYellow));
-            enemies.Add(new Enemy("testo", 4, 10, 0, 'T', 1, ConsoleColor.DarkYellow));
+            enemies.Add(new Enemy("testo", 4, 10, 0, '#', 1, ConsoleColor.DarkGray));
+
 
 
             while (isPlaying)
@@ -77,19 +80,24 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                         Console.SetCursorPosition(enemies[i]._x, enemies[i]._y);
                         WriteTileWithColor(map.Maps[enemies[i]._y][enemies[i]._x]);
                         enemies.RemoveAt(i);
-                        continue; //skips past rest
+                        //isPlaying = true;
+                        //continue; //skips past rest
                     }
                     MoveEnemy(enemies[i]);
                 }
                 DrawEntities();
                 DrawGold();
-
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(60, 2);
+            Console.WriteLine($" Name:{player._name} Health:{player._health} Gold:{gold}");
+            
 
             }
             if ((map.Maps[player._y][player._x] == 'G') || (player._health == 0))
             {
                 if (player._health == 0)
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.SetCursorPosition(60, 23);// outputs player death and end of game prompts to exit
                     Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died with {gold} golds on them");
                     Console.ReadKey(true);
@@ -97,6 +105,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
                 if (map.Maps[player._y][player._x] == 'G')
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     isPlaying = false;
                     Console.SetCursorPosition(60, 22);// outputs player death and end of game prompts to exit
                     Console.WriteLine($" {player._name} has reached the goal with {player._health} health, ");
@@ -105,6 +114,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                     Console.ReadKey(true);
                 }
             }
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.SetCursorPosition(60, 24);
             Console.WriteLine(" please come back soon");
             Console.ReadKey(true);
@@ -137,39 +147,41 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
            
             bool hitEnemy = false;
-            foreach (var e in enemies)
+            foreach (var enmy in enemies)
             {
-                if (nextX == e._x && nextY == e._y)
+                if (nextX == enmy._x && nextY == enmy._y)
                 {
-
+                    
                     Console.Beep(800, 50);
-                    e._health -= player._attack;
-                    player._health -=  e._attack;
-
+                    enmy._health -= player._attack;
+                    player._health -=  enmy._attack;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.SetCursorPosition(60, 14);
-                    Console.WriteLine($" {e._name} takes {player._attack} points of combat damage");
+                    Console.WriteLine($" {enmy._name} takes {player._attack} points of combat damage");
                     Console.SetCursorPosition(60, 15);
-                    Console.WriteLine($" {e._name} has {e._health} health...");
-
+                    Console.WriteLine($" {enmy._name} has {enmy._health} health...");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.SetCursorPosition(60, 17);
-                    Console.WriteLine($" {player._name} takes {e._attack} points of combat damage");
+                    Console.WriteLine($" {player._name} takes {enmy._attack} points of combat damage");
                     Console.SetCursorPosition(60, 18);
                     Console.WriteLine($" {player._name} has {player._health} health...");
 
-                    if (player._health <= 0 || e._health <= 0)
+                    if (player._health <= 0 || enmy._health <= 0)
                     {
                         if (player._health <= 0)
                         {
+                            Console.ForegroundColor = ConsoleColor.Magenta;
                             player._health = 0;
                             Console.SetCursorPosition(60, 20);
                             Console.WriteLine($" {player._name} has {player._health} health, {player._name} has died");
                             isPlaying = false;
                         }
-                        if (e._health <= 0)
+                        if (enmy._health <= 0)
                         {
-                            e._health = 0;
+                            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                            enmy._health = 0;
                             Console.SetCursorPosition(60, 21);
-                            Console.WriteLine($" {e._name} has {e._health} health, {e._name} has died");
+                            Console.WriteLine($" {enmy._name} has {enmy._health} health, {enmy._name} has died");
                             isPlaying = true;
                         }
                     }
@@ -186,6 +198,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
                     if ((player._x, player._y) == (treasure_x_pos, treasure_y_pos))// applies lootable gold 
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
                         gold += 15;
                         Console.SetCursorPosition(60, 5);
                         Console.WriteLine($" {player._name} loots 15 amounts of golds! ");
@@ -202,6 +215,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                         {
                             player._health = 0;
                         }
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.SetCursorPosition(60, 8);
                         Console.WriteLine($" {player._name} takes 30 points of lava damage");
                         Console.SetCursorPosition(60, 9);
@@ -215,6 +229,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                         {
                             player._health = plMaxHP;
                         }
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.SetCursorPosition(60, 11);
                         Console.WriteLine($" {player._name} Finds cool refreshing sparkling mineral");
                         Console.SetCursorPosition(60, 12);
@@ -235,29 +250,29 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             Console.ResetColor();
         }
 
-        static void MoveEnemy(Enemy e)
+        static void MoveEnemy(Enemy enmy)
         {
             Thread.Sleep(75);
-            int nextX = e._x;
-            int nextY = e._y;
+            int nextX = enmy._x;
+            int nextY = enmy._y;
             Random _rando = new Random();
-            int nextRandX = e._x + _rando.Next(-1, 2); //randomises mocve on x
-            int nextRandY = e._y + _rando.Next(-1, 2); // randomises moves on y
+            int nextRandX = enmy._x + _rando.Next(-1, 2); //randomises mocve on x
+            int nextRandY = enmy._y + _rando.Next(-1, 2); // randomises moves on y
             nextX = nextRandX;
             nextY = nextRandY;
 
-            // tells enemy how  to move when player is close
-            if (player._x > (e._x + 4)) nextX++;
-            else if (player._x < (e._x - 4)) nextX--;
+            //// tells enemy how  to move when player is close
+            //if (player._x > (e._x + 4)) nextX++;
+            //else if (player._x < (e._x - 4)) nextX--;
 
-            if (player._y > (e._y + 4)) nextY++;
-            else if (player._y < (e._y - 4)) nextY--;
+            //if (player._y > (e._y + 4)) nextY++;
+            //else if (player._y < (e._y - 4)) nextY--;
 
 
             //bool isAlly = false; //sets bool to check for other allies in movement path
             foreach (Enemy other in enemies)
             {
-                if (other != e && nextX == other._x && nextY == other._y)
+                if (other != enmy && nextX == other._x && nextY == other._y)
                 {
                     isAlly = true;
                     break;
@@ -266,14 +281,14 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
             char targetTile = map.Maps[nextY][nextX];
 
-            if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && (nextX != player._x || nextY != player._y))
+            if (map.CanMoveTo(nextX, nextY) && targetTile != '%' && (nextX != player._x || nextY != player._y) && targetTile != 'w' && targetTile != '#')
 
             {
-                Console.SetCursorPosition(e._x, e._y);
+                Console.SetCursorPosition(enmy._x, enmy._y);
                 Console.Write(" ");
 
-                e._x = nextX;
-                e._y = nextY;
+                enmy._x = nextX;
+                enmy._y = nextY;
             }
             else
             {
@@ -285,13 +300,13 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
         static void DrawEntities()// draws the player and the enemy symbols/ sprites
         {
 
-            foreach (var e in enemies)
+            foreach (var enmy in enemies)
             {
-                if (e._health > 0) // Only draw if alive
+                if (enmy._health > 0) // Only draw if alive
                 {
-                    Console.SetCursorPosition(e._x, e._y);
-                    Console.ForegroundColor = e._color;
-                    Console.Write(e._symbol);
+                    Console.SetCursorPosition(enmy._x, enmy._y);
+                    Console.ForegroundColor = enmy._color;
+                    Console.Write(enmy._symbol);
                 }
             }
 
@@ -310,8 +325,11 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 {
                     treasure_x_pos = goldPileSpawn.Next(treasure_min_max_x.Item1, treasure_min_max_x.Item2 + 1);
                     treasure_y_pos = goldPileSpawn.Next(treasure_min_max_y.Item1, treasure_min_max_y.Item2 + 1);
-                    if (map.CanMoveTo(treasure_x_pos, treasure_y_pos))
+                    char targetTile = map.Maps[nextY][nextX];
+                    if (map.CanMoveTo(treasure_x_pos, treasure_y_pos) && targetTile != '%' && targetTile != 'w' && targetTile != '#')
+                    // if (map.CanMoveTo(treasure_x_pos, treasure_y_pos) )
                     {
+                        // if (treasure_x_pos != player._x || treasure_y_pos != player._y && targetTile != '%' && targetTile != 'w' && targetTile != '#')
                         if (treasure_x_pos != player._x || treasure_y_pos != player._y) //checks for player
                         {
                             clearGoldSpawn = true;
@@ -325,7 +343,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 Console.Write("$");
                 Console.ResetColor();
                 goldTreasure = false;
-               
+
             }
             Console.ResetColor();
         }
