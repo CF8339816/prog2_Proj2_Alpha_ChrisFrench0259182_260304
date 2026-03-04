@@ -61,7 +61,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             enemies.Add(new Enemy("Orcus", 15, 12, 12, 'O', 30, ConsoleColor.DarkGreen));
             enemies.Add(new Enemy("Boss Hobbo", 49, 18, 15, 'H', 40, ConsoleColor.DarkYellow));
             enemies.Add(new Enemy("testo", 4, 10, 0, '#', 1, ConsoleColor.DarkGray));
-
+            enemies.Add(new Enemy("Nullo", 5, 10, 0, '#', 1, ConsoleColor.DarkGray));
 
 
             while (isPlaying)
