@@ -10,7 +10,9 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 {
-    class Program
+
+   //public class Program
+   class Program
     {
         static string Name;
         
@@ -207,21 +209,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                         goldTreasure = true;
                         DrawGold();
                     }
-                    if (map.Maps[player._y][player._x] == '%')// applies lava damage 
-                    {
-                        player._health -= 30;
 
-                        if (player._health < 0)
-                        {
-                            player._health = 0;
-                        }
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.SetCursorPosition(60, 8);
-                        Console.WriteLine($" {player._name} takes 30 points of lava damage");
-                        Console.SetCursorPosition(60, 9);
-                        Console.WriteLine($" {player._name} now has {player._health} HP");
-                        if (player._health == 0) isPlaying = false;
-                    }
                     if (map.Maps[player._y][player._x] == 'w')// applies spring water healing
                     {
                         player._health += 20;
@@ -234,6 +222,25 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                         Console.WriteLine($" {player._name} Finds cool refreshing sparkling mineral");
                         Console.SetCursorPosition(60, 12);
                         Console.WriteLine($" water and is healed for 20 pts {player._name} now has {player._health} HP");
+                    }
+
+                    if (map.Maps[player._y][player._x] == '%')// applies lava damage 
+                    {
+                        player._health = player._health - 5;
+
+                        if (player._health < 0)
+                        {
+                            player._health = 0;
+                        }
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.SetCursorPosition(60, 8);
+                        Console.WriteLine($" {player._name} takes 30 points of lava damage");
+                        Console.SetCursorPosition(60, 9);
+                        Console.WriteLine($" {player._name} now has {player._health} HP");
+                        if (player._health == 0)
+                        {
+                            isPlaying = false;
+                        }
                     }
                 }
             }
@@ -261,15 +268,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             nextX = nextRandX;
             nextY = nextRandY;
 
-            //// tells enemy how  to move when player is close
-            //if (player._x > (e._x + 4)) nextX++;
-            //else if (player._x < (e._x - 4)) nextX--;
-
-            //if (player._y > (e._y + 4)) nextY++;
-            //else if (player._y < (e._y - 4)) nextY--;
-
-
-            //bool isAlly = false; //sets bool to check for other allies in movement path
+           
             foreach (Enemy other in enemies)
             {
                 if (other != enmy && nextX == other._x && nextY == other._y)

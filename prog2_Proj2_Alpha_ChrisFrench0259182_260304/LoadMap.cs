@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 {
-    internal class LoadMap
+   public class LoadMap
     {
         private string filepath1 = "map1.txt";
         public string[] Maps;

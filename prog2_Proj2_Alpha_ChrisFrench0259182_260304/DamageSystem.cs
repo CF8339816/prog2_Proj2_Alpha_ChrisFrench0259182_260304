@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 {
-    internal class DamageSystem
-    {
-    }
+
+    //public class DamageSystem
+    //{
+    //    public int _lavaDmg;
+    //    _lavaDmg = 30;
+    //}
 }
