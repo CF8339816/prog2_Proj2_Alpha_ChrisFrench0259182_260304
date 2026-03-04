@@ -212,7 +212,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
 
                     if (map.Maps[player._y][player._x] == 'w')// applies spring water healing
                     {
-                        player._health += 20;
+                        player._health += 4;
                         if (player._health > plMaxHP)
                         {
                             player._health = plMaxHP;
@@ -221,7 +221,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                         Console.SetCursorPosition(60, 11);
                         Console.WriteLine($" {player._name} Finds cool refreshing sparkling mineral");
                         Console.SetCursorPosition(60, 12);
-                        Console.WriteLine($" water and is healed for 20 pts {player._name} now has {player._health} HP");
+                        Console.WriteLine($" water and is healed for 24 pts {player._name} now has {player._health} HP");
                     }
 
                     if (map.Maps[player._y][player._x] == '%')// applies lava damage 
