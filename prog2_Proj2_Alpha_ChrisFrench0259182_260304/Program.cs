@@ -59,7 +59,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             enemies.Add(new Enemy("Gobbo", 50, 4, 10, '&', 25, ConsoleColor.Green));
             enemies.Add(new Enemy("Slobbo", 20, 23, 8, '&', 20, ConsoleColor.Green));
             enemies.Add(new Enemy("Orcus", 15, 12, 12, 'O', 30, ConsoleColor.DarkGreen));
-            enemies.Add(new Enemy("Boss Hobbo", 49, 18, 15, 'H', 40, ConsoleColor.DarkYellow));
+            enemies.Add(new Enemy("Boss Hobbo", 49, 19, 15, 'H', 40, ConsoleColor.DarkYellow));
             enemies.Add(new Enemy("testo", 4, 10, 0, '#', 1, ConsoleColor.DarkGray));
             enemies.Add(new Enemy("Nullo", 5, 10, 0, '#', 1, ConsoleColor.DarkGray));
 
@@ -245,64 +245,7 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
             }
         }
         
-        
-        //static void EnviromentallAffectors()
-        //{
-        //    if (!hitEnemy && map.CanMoveTo(nextX, nextY))
-        //    {
-        //        Console.SetCursorPosition(player._x, player._y);
-        //        char oldTile = map.Maps[player._y][player._x];
-        //        WriteTileWithColor(oldTile);
-
-        //        player._x = nextX;
-        //        player._y = nextY;
-
-        //        if ((player._x, player._y) == (treasure_x_pos, treasure_y_pos))// applies lootable gold 
-        //        {
-        //            Console.ForegroundColor = ConsoleColor.DarkYellow;
-        //            gold += 15;
-        //            Console.SetCursorPosition(60, 5);
-        //            Console.WriteLine($" {player._name} loots 15 amounts of golds! ");
-        //            Console.SetCursorPosition(60, 6);
-        //            Console.WriteLine($"{player._name} now has {gold} gold...woooo!");
-        //            goldTreasure = true;
-        //            DrawGold();
-        //        }
-
-        //        if (map.Maps[player._y][player._x] == 'w')// applies spring water healing
-        //        {
-        //            player._health += 4;
-        //            if (player._health > plMaxHP)
-        //            {
-        //                player._health = plMaxHP;
-        //            }
-        //            Console.ForegroundColor = ConsoleColor.DarkCyan;
-        //            Console.SetCursorPosition(60, 11);
-        //            Console.WriteLine($" {player._name} Finds cool refreshing sparkling mineral");
-        //            Console.SetCursorPosition(60, 12);
-        //            Console.WriteLine($" water and is healed for 24 pts {player._name} now has {player._health} HP");
-        //        }
-
-        //        if (map.Maps[player._y][player._x] == '%')// applies lava damage 
-        //        {
-        //            player._health = player._health - 5;
-
-        //            if (player._health < 0)
-        //            {
-        //                player._health = 0;
-        //            }
-        //            Console.ForegroundColor = ConsoleColor.Red;
-        //            Console.SetCursorPosition(60, 8);
-        //            Console.WriteLine($" {player._name} takes 30 points of lava damage");
-        //            Console.SetCursorPosition(60, 9);
-        //            Console.WriteLine($" {player._name} now has {player._health} HP");
-        //            if (player._health == 0)
-        //            {
-        //                isPlaying = false;
-        //            }
-        //        }
-        //    }
-        //}
+       
         static void WriteTileWithColor(char tile) //colours the map tiles and writes them to screen
         {
             if (tile == '%') Console.ForegroundColor = ConsoleColor.Red;
@@ -379,17 +322,18 @@ namespace prog2_Proj2_Alpha_ChrisFrench0259182_260304
                 bool clearGoldSpawn = false;
                 while (!clearGoldSpawn)
                 {
-                    treasure_x_pos = goldPileSpawn.Next(treasure_min_max_x.Item1, treasure_min_max_x.Item2 + 1);
-                    treasure_y_pos = goldPileSpawn.Next(treasure_min_max_y.Item1, treasure_min_max_y.Item2 + 1);
+                        treasure_x_pos = goldPileSpawn.Next(treasure_min_max_x.Item1, treasure_min_max_x.Item2 + 1);
+                        treasure_y_pos = goldPileSpawn.Next(treasure_min_max_y.Item1, treasure_min_max_y.Item2 + 1);
                     char targetTile = map.Maps[nextY][nextX];
+                    
                     if (map.CanMoveTo(treasure_x_pos, treasure_y_pos) && targetTile != '%' && targetTile != 'w' && targetTile != '#')
-                    // if (map.CanMoveTo(treasure_x_pos, treasure_y_pos) )
                     {
-                        // if (treasure_x_pos != player._x || treasure_y_pos != player._y && targetTile != '%' && targetTile != 'w' && targetTile != '#')
+                                                                   
                         if (treasure_x_pos != player._x || treasure_y_pos != player._y) //checks for player
                         {
                             clearGoldSpawn = true;
                         }
+                    
                     }
                 }
 
